@@ -1,6 +1,6 @@
 mod antidupe {
     pub trait DirectoryContentsLister {
-        
+
     }
 
     use std::path::Path;
@@ -9,10 +9,8 @@ mod antidupe {
         path: Path
     }
 
-    use std::iter::empty;
-
-    pub fn get_duplicates<'a>(lister: &'a DirectoryContentsLister) -> Iterator<Item = &'a DuplicatedItem> {
-        empty::<&DuplicatedItem>();
+    pub fn get_duplicates(lister: &DirectoryContentsLister) -> Vec<&DuplicatedItem> {
+        Vec::new()
     }
 
 }
@@ -37,6 +35,6 @@ mod antidupe_should_report {
     fn no_duplicates_for_empty_directory() {
         let lister = FakeDirectoryContentsLister::new();
         let duplicates = get_duplicates(&lister);
-        assert_eq!(duplicates.count(), 0);
+        assert_eq!(duplicates.len(), 0);
     }
 }
