@@ -5,7 +5,7 @@ mod antidupe {
     }
 
     pub trait DirectoryContentsLister {
-        fn entries() -> Vec<&DirectoryEntry>;
+        fn entries(&self) -> Vec<&DirectoryEntry>;
     }
 
     pub struct DuplicatedItem {
@@ -20,6 +20,7 @@ mod antidupe {
 #[cfg(test)]
 mod antidupe_should_report {
 
+    use antidupe::DirectoryEntry;
     use antidupe::DirectoryContentsLister;
     use antidupe::duplicates;
 
@@ -39,7 +40,7 @@ mod antidupe_should_report {
     }
 
     impl DirectoryContentsLister for FakeDirectoryContentsLister {
-        fn entries() -> Vec<&DirectoryEntry> {
+        fn entries(&self) -> Vec<&DirectoryEntry> {
             unimplemented!()
         }
     }
@@ -54,5 +55,7 @@ mod antidupe_should_report {
     #[test]
     fn no_duplicates_for_directory_with_one_file() {
         let lister = FakeDirectoryContentsLister::single_file();
+        let duplicates = duplicates(&lister);
+        assert_eq!(duplicates.len(), 0);
     }
 }
