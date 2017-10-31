@@ -34,7 +34,7 @@ mod antidupe_should_report {
         }
         fn single_file() -> FakeDirectoryContentsLister {
             FakeDirectoryContentsLister{
-                entries: vec![  ],
+                entries: vec![],
             }
         }
     }
