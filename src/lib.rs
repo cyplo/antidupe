@@ -1,17 +1,11 @@
 mod antidupe {
 
-    pub struct DirectoryEntry {
-
-    }
-
-    pub trait DirectoryContentsLister {
-        fn entries(&self) -> Vec<&DirectoryEntry>;
-    }
+    use std::path::Path;
 
     pub struct DuplicatedItem {
     }
 
-    pub fn duplicates(lister: &DirectoryContentsLister) -> Vec<&DuplicatedItem> {
+    pub fn duplicates(path: &Path) -> Vec<&DuplicatedItem> {
         Vec::new()
     }
 
@@ -19,43 +13,15 @@ mod antidupe {
 
 #[cfg(test)]
 mod antidupe_should_report {
+    extern crate tempdir;
 
-    use antidupe::DirectoryEntry;
-    use antidupe::DirectoryContentsLister;
+    use self::tempdir::TempDir;
     use antidupe::duplicates;
-
-    struct FakeDirectoryContentsLister {
-        entries: Vec<DirectoryEntry>
-    }
-
-    impl FakeDirectoryContentsLister {
-        fn empty() -> FakeDirectoryContentsLister {
-            FakeDirectoryContentsLister{ entries: Vec::new() }
-        }
-        fn single_file() -> FakeDirectoryContentsLister {
-            FakeDirectoryContentsLister{
-                entries: vec![],
-            }
-        }
-    }
-
-    impl DirectoryContentsLister for FakeDirectoryContentsLister {
-        fn entries(&self) -> Vec<&DirectoryEntry> {
-            unimplemented!()
-        }
-    }
 
     #[test]
     fn no_duplicates_for_empty_directory() {
-        let lister = FakeDirectoryContentsLister::empty();
-        let duplicates = duplicates(&lister);
-        assert_eq!(duplicates.len(), 0);
-    }
-
-    #[test]
-    fn no_duplicates_for_directory_with_one_file() {
-        let lister = FakeDirectoryContentsLister::single_file();
-        let duplicates = duplicates(&lister);
+        let empty_directory = TempDir::new("empty").unwrap();
+        let duplicates = duplicates(&empty_directory.path());
         assert_eq!(duplicates.len(), 0);
     }
 }
